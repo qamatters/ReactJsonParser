@@ -1,8 +1,45 @@
 var jp = require('jsonpath');
 
- //192.168.1.36
+//192.168.1.36
 const Home = () => {
-   const sampleData = "";
+
+    const sampleData = 
+        {
+            "store": {
+                "book": [
+                    {
+                        "category": "reference",
+                        "author": "Nigel Rees",
+                        "title": "Sayings of the Century",
+                        "price": 8.95
+                    }, {
+                        "category": "fiction",
+                        "author": "Evelyn Waugh",
+                        "title": "Sword of Honour",
+                        "price": 12.99
+                    }, {
+                        "category": "fiction",
+                        "author": "Herman Melville",
+                        "title": "Moby Dick",
+                        "isbn": "0-553-21311-3",
+                        "price": 8.99
+                    }, {
+                        "category": "fiction",
+                        "author": "J. R. R. Tolkien",
+                        "title": "The Lord of the Rings",
+                        "isbn": "0-395-19395-8",
+                        "price": 22.99
+                    }
+                ],
+                "bicycle": {
+                    "color": "red",
+                    "price": 19.95
+                }
+            }
+        }
+    ;
+
+    const sampleDataValue = JSON.stringify(sampleData, null, 4);
 
     const handleFormatClick = () => {
         const outputArea = document.querySelector(".large-area--output");
@@ -37,11 +74,82 @@ const Home = () => {
 
     return (
         <div class="container">
-            <textarea className="large-area large-area--input" placeholder={sampleData}></textarea>
+            <textarea className="large-area large-area--input">{sampleDataValue}</textarea>
             <textarea readOnly class="large-area large-area--output" placeholder="Your JSON will appear here..."></textarea>
-            <input id="inputfield" className="longInput" placeholder="$.phoneNumbers[:1].type"></input>
+            <table>
+                <thead>
+                    <tr>
+                        <th align="left">JsonPath</th>
+                        <th align="left">Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td align="left">$.store.book[*].author</td>
+                        <td align="left">The authors of all books</td>
+                    </tr>
+                    <tr>
+                        <td align="left">$..author</td>
+                        <td align="left">All authors</td>
+                    </tr>
+                    <tr>
+                        <td align="left">$.store.*</td>
+                        <td align="left">All things, both books and bicycles</td>
+                    </tr>
+                    <tr>
+                        <td align="left">$.store..price</td>
+                        <td align="left">The price of everything</td>
+                    </tr>
+                    <tr>
+                        <td align="left">$..book[2]</td>
+                        <td align="left">The third book</td>
+                    </tr>
+                    <tr>
+                        <td align="left">$..book[-2]</td>
+                        <td align="left">The second to last book</td>
+                    </tr>
+                    <tr>
+                        <td align="left">$..book[0,1]</td>
+                        <td align="left">The first two books</td>
+                    </tr>
+                    <tr>
+                        <td align="left">$..book[:2]</td>
+                        <td align="left">All books from index 0 (inclusive) until index 2 (exclusive)</td>
+                    </tr>
+                    <tr>
+                        <td align="left">$..book[1:2]</td>
+                        <td align="left">All books from index 1 (inclusive) until index 2 (exclusive)</td>
+                    </tr>
+                    <tr>
+                        <td align="left">$..book[-2:]</td>
+                        <td align="left">Last two books</td>
+                    </tr>
+                    <tr>
+                        <td align="left">$..book[2:]</td>
+                        <td align="left">All books from index 2 (inclusive) to last</td>
+                    </tr>
+                    <tr>
+                        <td align="left">$..book[?(@.isbn)]</td>
+                        <td align="left">All books with an ISBN number</td>
+                    </tr>
+                    <tr>
+                        <td align="left">$.store.book[?(@.price &lt; 10)]</td>
+                        <td align="left">All books in store cheaper than 10</td>
+                    </tr>
+                    <tr>
+                        <td align="left">$..*</td>
+                        <td align="left">Give me every thing</td>
+                    </tr>
+                    <tr>
+                        <td align="left">$..book.length()</td>
+                        <td align="left">The number of books</td>
+                    </tr>
+                </tbody>
+            </table>
+            <input id="inputfield" className="longInput" placeholder="Enter your query here..."></input>
             <div class="controls"> <button onClick={handleEvaluateClick} className="controls__button controls__button--evaluate">Evaluate Your Query</button></div>
             <div class="controls"> <button onClick={handleFormatClickForRequest} className="controls__button controls__button--format">Format Your Request</button></div>
+
         </div>
     );
 }

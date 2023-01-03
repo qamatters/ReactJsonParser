@@ -11,8 +11,8 @@ body {
 
 .container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 200px;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 100px;
   height: 100vh;
   box-sizing: border-box;
   padding: 20px;
@@ -20,7 +20,7 @@ body {
 
 
 .large-area {
-  height: 200%;
+  height: 100%;
   padding: 20px;
   box-sizing: border-box;
   color: #aaaaaa;
@@ -71,4 +71,9 @@ body {
 
 .controls__button:active {
   background: #00705a;
+}
+
+.table, th, td {
+  border: 1px solid;
+  color: #ffffff;
 }
