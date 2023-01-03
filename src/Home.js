@@ -63,7 +63,11 @@ const Home = () => {
         const query = inputField.value;
 
         var evaluatedValue = jp.query(formatted, query);
+        console.log("evaluated value:" + evaluatedValue);
         const result = JSON.stringify(evaluatedValue);
+
+        console.log("result :" + result);
+
         if (result.length === 2 && result.includes("[]")) {
             outputArea.value = "No Response. Please check your query";
         } else {
@@ -105,12 +109,12 @@ const Home = () => {
                         <td align="left">The third book</td>
                     </tr>
                     <tr>
-                        <td align="left">$..book[-2]</td>
-                        <td align="left">The second to last book</td>
+                        <td align="left">$..book[(@.length-1)]</td>
+                        <td align="left">The last book via script subscript</td>
                     </tr>
                     <tr>
-                        <td align="left">$..book[0,1]</td>
-                        <td align="left">The first two books</td>
+                        <td align="left">$..book[-1:]</td>
+                        <td align="left">The last book via slice</td>
                     </tr>
                     <tr>
                         <td align="left">$..book[:2]</td>
@@ -137,11 +141,19 @@ const Home = () => {
                         <td align="left">All books in store cheaper than 10</td>
                     </tr>
                     <tr>
+                        <td align="left">$..book[?(@.price==8.95)]</td>
+                        <td align="left">Filter all books that cost 8.95</td>
+                    </tr>
+                    <tr>
+                    <td align="left"><code>$..book[?(@.price&lt;30 &amp;&amp; @.category=="fiction")]</code> </td>
+                        <td align="left">Filter all fiction books cheaper than 30</td>
+                    </tr>
+                    <tr>
                         <td align="left">$..*</td>
                         <td align="left">Give me every thing</td>
                     </tr>
                     <tr>
-                        <td align="left">$..book.length()</td>
+                        <td align="left">$..book.length</td>
                         <td align="left">The number of books</td>
                     </tr>
                 </tbody>
