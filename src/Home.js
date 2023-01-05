@@ -3,43 +3,62 @@ var jp = require('jsonpath');
 //192.168.1.36
 const Home = () => {
 
-    const sampleData = 
-        {
-            "store": {
-                "book": [
-                    {
-                        "category": "reference",
-                        "author": "Nigel Rees",
-                        "title": "Sayings of the Century",
-                        "price": 8.95
-                    }, {
-                        "category": "fiction",
-                        "author": "Evelyn Waugh",
-                        "title": "Sword of Honour",
-                        "price": 12.99
-                    }, {
-                        "category": "fiction",
-                        "author": "Herman Melville",
-                        "title": "Moby Dick",
-                        "isbn": "0-553-21311-3",
-                        "price": 8.99
-                    }, {
-                        "category": "fiction",
-                        "author": "J. R. R. Tolkien",
-                        "title": "The Lord of the Rings",
-                        "isbn": "0-395-19395-8",
-                        "price": 22.99
-                    }
-                ],
-                "bicycle": {
-                    "color": "red",
-                    "price": 19.95
+    const sampleData =
+    {
+        "store": {
+            "book": [
+                {
+                    "category": "reference",
+                    "author": "Nigel Rees",
+                    "title": "Sayings of the Century",
+                    "price": 8.95
+                }, {
+                    "category": "fiction",
+                    "author": "Evelyn Waugh",
+                    "title": "Sword of Honour",
+                    "price": 12.99
+                }, {
+                    "category": "fiction",
+                    "author": "Herman Melville",
+                    "title": "Moby Dick",
+                    "isbn": "0-553-21311-3",
+                    "price": 8.99
+                }, {
+                    "category": "fiction",
+                    "author": "J. R. R. Tolkien",
+                    "title": "The Lord of the Rings",
+                    "isbn": "0-395-19395-8",
+                    "price": 22.99
                 }
+            ],
+            "bicycle": {
+                "color": "red",
+                "price": 19.95
             }
         }
-    ;
+    }
+        ;
 
     const sampleDataValue = JSON.stringify(sampleData, null, 4);
+
+    const handleKeyPressEvaluateQueryChange = () => {
+        let textBox = document.getElementById('inputfield');
+        if(textBox.value === "") {
+            clearContentFromOutPutField();
+        }
+        textBox.addEventListener('keypress', (event) => {
+            handleEvaluateClick();
+        });
+
+        textBox.addEventListener('backspace', (event) => {
+            clearContentFromOutPutField();
+        });
+    }
+
+    const clearContentFromOutPutField = () => {
+        document.querySelector(".large-area--output").value='';
+
+    } 
 
     const handleFormatClick = () => {
         const outputArea = document.querySelector(".large-area--output");
@@ -53,11 +72,16 @@ const Home = () => {
         inputArea.value = formatted;
     }
 
-
     const handleEvaluateClick = () => {
+        const noResponseValue = "No match. Please check your query";
         const inputArea = document.querySelector(".large-area--input");
         const inputField = document.querySelector(".longInput");
         const outputArea = document.querySelector(".large-area--output");
+
+        let textBox = document.getElementById('inputfield');
+        if(textBox.value === "") {
+            clearContentFromOutPutField();
+        }
 
         const formatted = JSON.parse(inputArea.value);
         const query = inputField.value;
@@ -69,7 +93,7 @@ const Home = () => {
         console.log("result :" + result);
 
         if (result.length === 2 && result.includes("[]")) {
-            outputArea.value = "No Response. Please check your query";
+            outputArea.value = noResponseValue;
         } else {
             outputArea.value = result;
             handleFormatClick();
@@ -79,7 +103,7 @@ const Home = () => {
     return (
         <div class="container">
             <textarea className="large-area large-area--input">{sampleDataValue}</textarea>
-            <textarea readOnly class="large-area large-area--output" placeholder="Your JSON will appear here..."></textarea>
+            <textarea readOnly class="large-area large-area--output" placeholder="Your Query Response will appear here..."></textarea>
             <table>
                 <thead>
                     <tr>
@@ -145,7 +169,7 @@ const Home = () => {
                         <td align="left">Filter all books that cost 8.95</td>
                     </tr>
                     <tr>
-                    <td align="left"><code>$..book[?(@.price&lt;30 &amp;&amp; @.category=="fiction")]</code> </td>
+                        <td align="left"><code>$..book[?(@.price&lt;30 &amp;&amp; @.category=="fiction")]</code> </td>
                         <td align="left">Filter all fiction books cheaper than 30</td>
                     </tr>
                     <tr>
@@ -158,10 +182,9 @@ const Home = () => {
                     </tr>
                 </tbody>
             </table>
-            <input id="inputfield" className="longInput" placeholder="Enter your query here..."></input>
+            <input id="inputfield" className="longInput" placeholder="Enter your query here..." onKeyPress={handleKeyPressEvaluateQueryChange}></input>
             <div class="controls"> <button onClick={handleEvaluateClick} className="controls__button controls__button--evaluate">Evaluate Your Query</button></div>
             <div class="controls"> <button onClick={handleFormatClickForRequest} className="controls__button controls__button--format">Format Your Request</button></div>
-
         </div>
     );
 }
